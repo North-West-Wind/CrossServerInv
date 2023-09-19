@@ -29,7 +29,9 @@ public class DatabaseManager {
             stmt.setString(1, Config.getDatabaseName());
             stmt.setString(2, "players");
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) return true;
+            rs.next();
+            if (rs.getInt(1) == 1) return true;
+            CrossServerInv.LOGGER.info("Players table doesn't exist in database. Creating one...");
             stmt = conn.prepareStatement("CREATE TABLE players (uuid CHAR(36) PRIMARY KEY, inventory JSON, xp INT)");
             return stmt.execute();
         } catch (SQLException e) {
