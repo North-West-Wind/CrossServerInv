@@ -1,5 +1,6 @@
 package in.northwestw.crossserverinv.types;
 
+import in.northwestw.crossserverinv.NBTSerializer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -7,20 +8,20 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public class DBItem {
-    private String resourceLocation;
-    private int count;
-    private String snbt;
+    private final String resourceLocation;
+    private final int count;
+    private final String nbt;
 
     public DBItem(ItemStack stack) {
         if (stack == null || stack.isEmpty()) {
             this.resourceLocation = "";
             this.count = 0;
-            this.snbt = "";
+            this.nbt = "";
         } else {
             this.resourceLocation = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
             this.count = stack.getCount();
-            if (stack.hasTag()) this.snbt = stack.getTag().toString();
-            else this.snbt = "";
+            if (stack.hasTag()) this.nbt = NBTSerializer.nbtToString(stack.getTag());
+            else this.nbt = "";
         }
     }
 
@@ -33,15 +34,14 @@ public class DBItem {
     }
 
     public String getSNBT() {
-        return snbt;
+        return nbt;
     }
 
     public ItemStack getItemStack() {
         if (this.resourceLocation.isEmpty() || this.count == 0) return ItemStack.EMPTY;
         Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(this.resourceLocation));
         ItemStack stack = new ItemStack(item, this.count);
-        CompoundTag nbt = new CompoundTag();
-        
-        stack.setTag();
+        stack.setTag((CompoundTag) NBTSerializer.stringToNbt(this.nbt));
+        return stack;
     }
 }

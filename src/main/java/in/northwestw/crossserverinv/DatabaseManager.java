@@ -1,5 +1,6 @@
 package in.northwestw.crossserverinv;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import in.northwestw.crossserverinv.types.DBInventory;
@@ -12,9 +13,10 @@ import java.sql.*;
 import java.util.UUID;
 
 public class DatabaseManager {
+    private static Gson GSON = Gsons.CONCISE_GSON;
     private static String JDBC_URL;
 
-    static {
+    public static void init() {
         if (Config.isEnabled()) {
             JDBC_URL = "jdbc:mysql://" + Config.getMysqlAddress() + "/" + Config.getDatabaseName();
             if (!setupDatabase()) JDBC_URL = null;
@@ -68,7 +70,7 @@ public class DatabaseManager {
             offhandJson.addProperty("count", item.getCount());
             offhandJson.addProperty("snbt", item.getSNBT());
             json.add("offhand", offhandJson);
-            String jsonStr = CrossServerInv.GSON.toJson(json);
+            String jsonStr = GSON.toJson(json);
             // Prepare statement to check if row exists
             PreparedStatement stmt = conn.prepareStatement("SELECT uuid FROM players WHERE uuid = ?");
             stmt.setString(1, player.getUUID().toString());
@@ -102,11 +104,11 @@ public class DatabaseManager {
             // Read 1 row only
             if (rs.next()) {
                 String invJsonStr = rs.getString("inventory");
-                JsonObject json = CrossServerInv.GSON.fromJson(invJsonStr, JsonObject.class);
+                JsonObject json = GSON.fromJson(invJsonStr, JsonObject.class);
                 DBInventory inv = new DBInventory(
-                        json.getAsJsonArray("items").asList().stream().map(el -> CrossServerInv.GSON.fromJson(el, DBItem.class)).toList(),
-                        json.getAsJsonArray("armor").asList().stream().map(el -> CrossServerInv.GSON.fromJson(el, DBItem.class)).toList(),
-                        CrossServerInv.GSON.fromJson(json.getAsJsonObject("offhand"), DBItem.class),
+                        json.getAsJsonArray("items").asList().stream().map(el -> GSON.fromJson(el, DBItem.class)).toList(),
+                        json.getAsJsonArray("armor").asList().stream().map(el -> GSON.fromJson(el, DBItem.class)).toList(),
+                        GSON.fromJson(json.getAsJsonObject("offhand"), DBItem.class),
                         rs.getInt("xp")
                         );
                 return inv;

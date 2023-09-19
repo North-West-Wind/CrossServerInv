@@ -3,6 +3,7 @@
   "package": "in.northwestw.crossserverinv.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinPlayerList",
     "MixinServerPlayer"
   ],
   "injectors": {

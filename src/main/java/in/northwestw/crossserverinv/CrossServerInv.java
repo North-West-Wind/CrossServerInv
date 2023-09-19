@@ -10,10 +10,10 @@ import java.io.File;
 public class CrossServerInv implements ModInitializer {
     public static final String MOD_ID = "crossserverinv";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static final Gson GSON = new Gson();
 
     @Override
     public void onInitialize() {
-
+        Config.init();
+        DatabaseManager.init();
     }
 }
