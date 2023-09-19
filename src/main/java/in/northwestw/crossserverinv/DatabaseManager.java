@@ -18,7 +18,7 @@ public class DatabaseManager {
 
     public static void init() {
         if (Config.isEnabled()) {
-            JDBC_URL = "jdbc:mysql://" + Config.getMysqlAddress() + "/" + Config.getDatabaseName();
+            JDBC_URL = "jdbc:mysql://" + Config.getMysqlAddress() + ":" + Config.getMysqlPort() + "/" + Config.getDatabaseName();
             if (!setupDatabase()) JDBC_URL = null;
         } else JDBC_URL = null;
     }

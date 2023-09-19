@@ -1,9 +1,17 @@
-# Fabric Example Mod
+# Cross Server Inventory
+Sync your inventory across servers. Idea from [InvSync](https://github.com/MrNavaStar/InvSync), but they still haven't updated to 1.20.1, so I decided to make my own.
 
-## Setup
-
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+## Configuration
+Config file is located at `config/csi.json`:
+```json
+{
+  "mysql_address": "",
+  "mysql_port": 3306,
+  "mysql_username": "",
+  "mysql_password": "",
+  "db_name": ""
+}
+```
 
 ## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+GPLv3
