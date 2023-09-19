@@ -1,41 +1,31 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "crossserverinv",
 	"version": "${version}",
-	"name": "Example mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Cross Server Inventory",
+	"description": "Player inventory across servers.",
 	"authors": [
-		"Me!"
+		"NorthWestWind"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/North-West-Wind/CrossServerInv",
+		"sources": "https://github.com/North-West-Wind/CrossServerInv"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"license": "GPLv3",
+	"icon": "assets/crossserverinv/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
-		],
-		"client": [
-			"com.example.ExampleModClient"
+			"in.northwestw.crossserverinv.CrossServerInv"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
-		{
-			"config": "modid.client.mixins.json",
-			"environment": "client"
-		}
+		"crossserverinv.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.14.21",
 		"minecraft": "~1.20.1",
 		"java": ">=17",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
