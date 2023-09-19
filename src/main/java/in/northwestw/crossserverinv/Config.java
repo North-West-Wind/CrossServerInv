@@ -8,7 +8,6 @@ import com.google.gson.stream.JsonReader;
 import java.io.*;
 
 public class Config {
-    private static final Gson GSON = new Gson();
     private static final File CONFIG_FILE = new File("config/csi.json");
     private static String MYSQL_ADDRESS, MYSQL_USERNAME, MYSQL_PASSWORD, DATABASE_NAME;
     private static int MYSQL_PORT;
@@ -27,10 +26,10 @@ public class Config {
                 json.addProperty("mysql_username", MYSQL_USERNAME);
                 json.addProperty("mysql_password", MYSQL_PASSWORD);
                 json.addProperty("db_name", DATABASE_NAME);
-                GSON.toJson(json, new FileWriter(CONFIG_FILE));
+                CrossServerInv.GSON.toJson(json, new FileWriter(CONFIG_FILE));
             } else {
                 JsonReader reader = new JsonReader(new FileReader(CONFIG_FILE));
-                JsonObject json = GSON.fromJson(reader, JsonObject.class);
+                JsonObject json = CrossServerInv.GSON.fromJson(reader, JsonObject.class);
                 MYSQL_ADDRESS = json.get("mysql_address").getAsString();
                 MYSQL_PORT = json.get("mysql_port").getAsInt();
                 MYSQL_USERNAME = json.get("mysql_username").getAsString();
@@ -40,6 +39,10 @@ public class Config {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static boolean isEnabled() {
+        return MYSQL_ADDRESS.isEmpty() || MYSQL_PORT < 0 || MYSQL_PORT > 65535 || MYSQL_USERNAME.isEmpty() || MYSQL_PASSWORD.isEmpty() || DATABASE_NAME.isEmpty();
     }
 
     public static String getMysqlAddress() {
