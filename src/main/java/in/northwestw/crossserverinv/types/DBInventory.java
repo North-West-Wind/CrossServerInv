@@ -7,13 +7,13 @@ import java.util.List;
 public class DBInventory {
     private final List<DBItem> items, armor;
     private final DBItem offhand;
-    private final int totalExperience;
+    private final int xp;
 
     public DBInventory(List<DBItem> items, List<DBItem> armor, DBItem offhand, int totalExperience) {
         this.items = ImmutableList.copyOf(items);
         this.armor = ImmutableList.copyOf(armor);
         this.offhand = offhand;
-        this.totalExperience = totalExperience;
+        this.xp = totalExperience;
     }
 
     public List<DBItem> getItems() {
@@ -28,7 +28,7 @@ public class DBInventory {
         return offhand;
     }
 
-    public int getTotalExperience() {
-        return totalExperience;
+    public int getXp() {
+        return xp;
     }
 }

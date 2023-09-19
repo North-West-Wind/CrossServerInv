@@ -81,14 +81,14 @@ public class DatabaseManager {
                 // Row exists
                 stmt = conn.prepareStatement("UPDATE players SET inventory = ?, xp = ? WHERE uuid = ?");
                 stmt.setString(1, jsonStr);
-                stmt.setLong(2, player.totalExperience);
+                stmt.setLong(2, player.experienceLevel);
                 stmt.setString(3, player.getUUID().toString());
             } else {
                 // Row doesn't exist
                 stmt = conn.prepareStatement("INSERT INTO players VALUES (?, ?, ?)");
                 stmt.setString(1, player.getUUID().toString());
                 stmt.setString(2, jsonStr);
-                stmt.setInt(3, player.totalExperience);
+                stmt.setInt(3, player.experienceLevel);
             }
             return stmt.execute();
         } catch (SQLException e) {
@@ -107,13 +107,12 @@ public class DatabaseManager {
             if (rs.next()) {
                 String invJsonStr = rs.getString("inventory");
                 JsonObject json = GSON.fromJson(invJsonStr, JsonObject.class);
-                DBInventory inv = new DBInventory(
+                return new DBInventory(
                         json.getAsJsonArray("items").asList().stream().map(el -> GSON.fromJson(el, DBItem.class)).toList(),
                         json.getAsJsonArray("armor").asList().stream().map(el -> GSON.fromJson(el, DBItem.class)).toList(),
                         GSON.fromJson(json.getAsJsonObject("offhand"), DBItem.class),
                         rs.getInt("xp")
                         );
-                return inv;
             }
         } catch (SQLException e) {
             e.printStackTrace();
