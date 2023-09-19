@@ -13,7 +13,7 @@ import java.sql.*;
 import java.util.UUID;
 
 public class DatabaseManager {
-    private static Gson GSON = Gsons.CONCISE_GSON;
+    private static final Gson GSON = Gsons.CONCISE_GSON;
     private static String JDBC_URL;
 
     public static void init() {
