@@ -21,6 +21,7 @@ public class DatabaseManager {
             JDBC_URL = "jdbc:mysql://" + Config.getMysqlAddress() + ":" + Config.getMysqlPort() + "/" + Config.getDatabaseName();
             if (!setupDatabase()) JDBC_URL = null;
         } else JDBC_URL = null;
+        CrossServerInv.LOGGER.info("CrossServerInv enabled: {}", JDBC_URL != null);
     }
 
     private static boolean setupDatabase() {
@@ -30,7 +31,10 @@ public class DatabaseManager {
             stmt.setString(2, "players");
             ResultSet rs = stmt.executeQuery();
             rs.next();
-            if (rs.getInt(1) == 1) return true;
+            if (rs.getInt(1) == 1) {
+                CrossServerInv.LOGGER.info("Database is setup already.");
+                return true;
+            }
             CrossServerInv.LOGGER.info("Players table doesn't exist in database. Creating one...");
             stmt = conn.prepareStatement("CREATE TABLE players (uuid CHAR(36) PRIMARY KEY, inventory JSON, xp INT)");
             return stmt.execute();
@@ -40,8 +44,8 @@ public class DatabaseManager {
         }
     }
 
-    public static boolean setPlayer(Player player) {
-        if (JDBC_URL == null) return true;
+    public static void setPlayer(Player player) {
+        if (JDBC_URL == null) return;
         try (Connection conn = DriverManager.getConnection(JDBC_URL, Config.getMysqlUsername(), Config.getMysqlPassword())) {
             // Create inventory json for db
             JsonObject json = new JsonObject();
@@ -90,10 +94,9 @@ public class DatabaseManager {
                 stmt.setString(2, jsonStr);
                 stmt.setInt(3, player.experienceLevel);
             }
-            return stmt.execute();
+            stmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
     }
 
