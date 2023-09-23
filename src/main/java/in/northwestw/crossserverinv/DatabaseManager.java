@@ -61,7 +61,7 @@ public class DatabaseManager {
             }
             json.add("items", items);
             JsonArray armor = new JsonArray();
-            for (ItemStack stack : inv.items) {
+            for (ItemStack stack : inv.armor) {
                 JsonObject armorJson = new JsonObject();
                 DBItem item = new DBItem(stack);
                 armorJson.addProperty("resourceLocation", item.getResourceLocation());

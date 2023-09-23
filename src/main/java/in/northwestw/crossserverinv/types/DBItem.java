@@ -10,18 +10,19 @@ import net.minecraft.world.item.ItemStack;
 public class DBItem {
     private final String resourceLocation;
     private final int count;
-    private final String nbt;
+    private final String snbt;
 
     public DBItem(ItemStack stack) {
         if (stack == null || stack.isEmpty()) {
             this.resourceLocation = "";
             this.count = 0;
-            this.nbt = "";
+            this.snbt = "";
         } else {
-            this.resourceLocation = BuiltInRegistries.ITEM.getKey(stack.getItem()).toString();
+            ResourceLocation rl = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            this.resourceLocation = rl.getNamespace() + ":" + rl.getPath();
             this.count = stack.getCount();
-            if (stack.hasTag()) this.nbt = NBTSerializer.nbtToString(stack.getTag());
-            else this.nbt = "";
+            if (stack.hasTag()) this.snbt = NBTSerializer.nbtToString(stack.getTag());
+            else this.snbt = "";
         }
     }
 
@@ -34,14 +35,14 @@ public class DBItem {
     }
 
     public String getSNBT() {
-        return nbt;
+        return snbt;
     }
 
     public ItemStack getItemStack() {
         if (this.resourceLocation.isEmpty() || this.count == 0) return ItemStack.EMPTY;
         Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(this.resourceLocation));
         ItemStack stack = new ItemStack(item, this.count);
-        stack.setTag((CompoundTag) NBTSerializer.stringToNbt(this.nbt));
+        if (!this.snbt.isEmpty()) stack.setTag((CompoundTag) NBTSerializer.stringToNbt(this.snbt));
         return stack;
     }
 }

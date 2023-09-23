@@ -18,7 +18,7 @@ public abstract class MixinPlayerList {
         CrossServerInv.LOGGER.info("A player is joining");
         DBInventory inv = DatabaseManager.getPlayer(serverPlayer.getUUID());
         if (inv == null) return;
-        CrossServerInv.LOGGER.info("Loading {}'s inventory from database", serverPlayer.getTabListDisplayName());
+        CrossServerInv.LOGGER.info("Loading {}'s inventory from database", serverPlayer.getDisplayName().getString());
         for (int ii = 0; ii < inv.getItems().size(); ii++) serverPlayer.getInventory().setItem(ii, inv.getItems().get(ii).getItemStack());
         for (int ii = 0; ii < inv.getArmor().size(); ii++) serverPlayer.getInventory().setItem(36 + ii, inv.getArmor().get(ii).getItemStack());
         serverPlayer.getInventory().setItem(40, inv.getOffhand().getItemStack());
@@ -27,7 +27,7 @@ public abstract class MixinPlayerList {
 
     @Inject(at = @At("TAIL"), method = "remove")
     public void remove(ServerPlayer serverPlayer, CallbackInfo ci) {
-        CrossServerInv.LOGGER.info("Saving {}'s inventory to database", serverPlayer.getTabListDisplayName());
+        CrossServerInv.LOGGER.info("Saving {}'s inventory to database", serverPlayer.getDisplayName().getString());
         DatabaseManager.setPlayer(serverPlayer);
     }
 }
